@@ -18,11 +18,18 @@ public class MathController {
         return new Greeting(counter.incrementAndGet(), String.format(template, name));
     }
     @GetMapping("/linearSearch")
-    public MathSearch linearSearch(@RequestParam(value = "numlist") Double[] lista) {
+    /*public MathSearch linearSearch(@RequestParam(value = "numlist") Double[] lista) {
         return new MathSearch();
+    }*/
+    public Greeting greeting1(@RequestParam(value = "name", defaultValue = "World") String name) {
+        return new Greeting(counter.incrementAndGet(), String.format(template, name));
     }
+
     @GetMapping("/binarySearch")
-    public MathSearch binarySearch(@RequestParam(value = "numlist") Double[] lista) {
+    /*public MathSearch binarySearch(@RequestParam(value = "numlist") Double[] lista) {
         return new MathSearch();
+    }*/
+    public Greeting greeting2(@RequestParam(value = "name", defaultValue = "World") String name) {
+        return new Greeting(counter.incrementAndGet(), String.format(template, name));
     }
 }
