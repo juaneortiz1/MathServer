@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
@@ -18,18 +21,45 @@ public class MathController {
         return new Greeting(counter.incrementAndGet(), String.format(template, name));
     }
     @GetMapping("/linearSearch")
-    /*public MathSearch linearSearch(@RequestParam(value = "numlist") Double[] lista) {
-        return new MathSearch();
-    }*/
-    public Greeting greeting1(@RequestParam(value = "name", defaultValue = "World") String name) {
-        return new Greeting(counter.incrementAndGet(), String.format(template, name));
+    public Map<String, Object> linearSearch(@RequestParam(value = "list") String listStr,
+                                            @RequestParam(value = "value") String value) {
+        String[] items = listStr.split(",");
+        int index = -1;
+        for (int i = 0; i < items.length; i++) {
+            if (items[i].trim().equals(value)) {
+                index = i;
+                break;
+            }
+        }
+        Map<String, Object> response = new HashMap<>();
+        response.put("operation", "linearSearch");
+        response.put("inputlist", listStr);
+        response.put("value", value);
+        response.put("output", index);
+        return response;
     }
 
     @GetMapping("/binarySearch")
-    /*public MathSearch binarySearch(@RequestParam(value = "numlist") Double[] lista) {
-        return new MathSearch();
-    }*/
-    public Greeting greeting2(@RequestParam(value = "name", defaultValue = "World") String name) {
-        return new Greeting(counter.incrementAndGet(), String.format(template, name));
+    public Map<String, Object> binarySearch(@RequestParam(value = "list") String listStr,
+                                            @RequestParam(value = "value") String value) {
+        String[] items = listStr.split(",");
+        Arrays.sort(items);
+        int index = binarySearchRecursive(items, value, 0, items.length - 1);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("operation", "binarySearch");
+        response.put("inputlist", listStr);
+        response.put("value", value);
+        response.put("output", index);
+        return response;
+    }
+
+    private int binarySearchRecursive(String[] arr, String value, int start, int end) {
+        if (start > end) return -1;
+        int mid = start + (end - start) / 2;
+        int compare = arr[mid].compareTo(value);
+        if (compare == 0) return mid;
+        else if (compare > 0) return binarySearchRecursive(arr, value, start, mid - 1);
+        else return binarySearchRecursive(arr, value, mid + 1, end);
     }
 }
